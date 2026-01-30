@@ -1,0 +1,26 @@
+query GetDomains {
+    domains {
+      id,
+      name,
+      info,
+      hosts {
+        id,
+        ip,
+        info,
+        subnetId,
+        ports {
+          id,
+          number,
+          info,
+          protocol,
+          banner
+        }
+        subnet {
+          id,
+          cidr,
+          name,
+          description
+        }
+      }
+    }
+}
