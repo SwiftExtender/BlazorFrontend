@@ -1,0 +1,188 @@
+﻿@page "/explore"
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<h3>Explore</h3>
+
+@if (isLoading)
+{
+    <p><em>Loading data...</em></p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">Error loading data: @errorMessage</p>
+}
+else
+{
+    <table class="table table-striped table-hover zebra-table">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Ip</th>
+                <th>SubnetId</th>
+                <th>Subnet</th>
+                <th>Info</th>
+                <th>Domains</th>
+                <th>Ports</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var host in hosts.hosts)
+            {
+                <tr>
+                    <td>@host.Id</td>
+                    <td>@host.Ip</td>
+                    <td>@host.SubnetId</td>
+                    <td>@host.Subnet</td>
+                    <td>@host.Info</td>
+                    <td>@foreach (Domain d in @host.Domains)
+                        {<EditForm Model="d" OnSubmit="EditDomain" FormName="DomainForm">
+                            <div>
+                                <label>
+                                Id
+                                <InputNumber @bind-Value="d.Id"></InputNumber>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Name
+                                <InputText @bind-Value="d.Name"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Info
+                                <InputText @bind-Value="d.Info"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                    <button type="submit">Save</button>
+                            </div>
+                            <div>
+                                    <button type="button btn-danger" @onclick="DeleteDomain">Delete</button>
+                            </div>
+                         </EditForm>}
+                    </td>
+                    <td>@foreach (Port port in @host.Ports)
+                        {<EditForm Model="port" OnSubmit="EditPort" FormName="PortForm">
+                            <div>
+                                <label>
+                                Id
+                                <InputNumber @bind-Value="port.Id"></InputNumber>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Number
+                                <InputNumber @bind-Value="port.Number"></InputNumber>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Info
+                                <InputText @bind-Value="port.Info"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Protocol
+                                <InputText @bind-Value="port.Protocol"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Banner
+                                <InputText @bind-Value="port.Banner"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                    <button type="submit">Save</button>
+                            </div>
+                            <div>
+                                    <button type="button btn-danger" @onclick="DeleteDomain">Delete</button>
+                            </div>
+                         </EditForm>}
+                    </td>
+                    <td>@host.Tags</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Hosts hosts;
+    private bool isLoading = true;
+    private string errorMessage;
+    private void EditDomain() {
+
+    }
+    private void DeleteDomain() {
+
+    }
+    private void EditPort() {
+
+    }
+    private void DeletePort() {
+
+    }
+    private void EditTag() {
+
+    }
+    private void DeleteTag() {
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetch and automatically deserialize the JSON into a List<User>
+            hosts = await Http.GetFromJsonAsync<Hosts>("http://localhost:4108/apiexplore");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+    public class Hosts
+    {
+        public List<Host> hosts { get; set; }
+    }
+    // C# Model matching the JSON structure
+    public class Host
+    {
+        public int Id { get; set; }
+        public string Ip { get; set; }
+        public string SubnetId { get; set; }
+        public string Subnet { get; set; }
+        public string Info { get; set; }
+        public List<Domain> Domains { get; set; }
+        public List<Port> Ports { get; set; }
+        public List<Tag> Tags { get; set; }
+    }
+    public class Tag {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string? Info { get; set; }
+    }
+    public class Port {
+        public int Id { get; set; }
+        public int Number { get; set; }
+        public string? Info { get; set; }
+        public int HostId { get; set; } 
+        public string Protocol { get; set; }
+        public string? Banner { get; set; }
+    }
+    public class Domain {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string? Info { get; set; }
+    }
+}

@@ -113,3 +113,11 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.zebra-table tbody tr:nth-child(even) {
+    background-color: #187735;
+}
+
+.zebra-table tbody tr:hover {
+    background-color: #305a3c;
+}
