@@ -14,8 +14,8 @@ else if (!string.IsNullOrEmpty(errorMessage))
 }
 else
 {
-    <table class="table table-striped table-hover zebra-table">
-        <thead class="table-dark">
+    <table class="table-custom table-striped">
+        <thead class="table-custom-head">
             <tr>
                 <th>Id</th>
                 <th>Ip</th>
@@ -36,8 +36,9 @@ else
                     <td>@host.SubnetId</td>
                     <td>@host.Subnet</td>
                     <td>@host.Info</td>
-                    <td>@foreach (Domain d in @host.Domains)
-                        {<EditForm Model="d" OnSubmit="EditDomain" FormName="DomainForm">
+                    <td>
+                        @foreach (Domain d in @host.Domains)
+                        {<div class="domain-form-box"><EditForm class="domain-form" Model="d" OnSubmit="EditDomain" FormName="DomainForm">
                             <div>
                                 <label>
                                 Id
@@ -57,15 +58,14 @@ else
                                 </label>
                             </div>
                             <div>
-                                    <button type="submit">Save</button>
+                                <button type="btn-success">Save</button>
+                                <button type="btn-danger" @onclick="DetachDomain">Detach</button>
                             </div>
-                            <div>
-                                    <button type="button btn-danger" @onclick="DeleteDomain">Delete</button>
-                            </div>
-                         </EditForm>}
+                         </EditForm>
+                         </div>}
                     </td>
                     <td>@foreach (Port port in @host.Ports)
-                        {<EditForm Model="port" OnSubmit="EditPort" FormName="PortForm">
+                        {<div class="port-form-box"><EditForm class="port-form" Model="port" OnSubmit="EditPort" FormName="PortForm">
                             <div>
                                 <label>
                                 Id
@@ -97,14 +97,33 @@ else
                                 </label>
                             </div>
                             <div>
-                                    <button type="submit">Save</button>
+                                <button type="submit">Save</button>
+                                <button type="button btn-danger" @onclick="DetachPort">Detach</button>
+                            </div>
+                         </EditForm></div>}
+                    </td>
+                    <td>@foreach (Tag tag in @host.Tags)
+                        {
+                            <div class="tag-form"><EditForm Model="tag" OnSubmit="EditTag" FormName="TagForm">
+                            <div>
+                                <label>
+                                Id
+                                <InputNumber @bind-Value="tag.Id"></InputNumber>
+                                </label>
                             </div>
                             <div>
-                                    <button type="button btn-danger" @onclick="DeleteDomain">Delete</button>
+                                <label>
+                                Number
+                                <InputNumber @bind-Value="tag.Name"></InputNumber>
+                                </label>
                             </div>
-                         </EditForm>}
+                            <div>
+                                <button type="submit">Save</button>
+                                <button type="button btn-danger" @onclick="DetachTag">Detach</button>
+                            </div>
+                         </EditForm></div>
+                        }
                     </td>
-                    <td>@host.Tags</td>
                 </tr>
             }
         </tbody>
@@ -118,19 +137,19 @@ else
     private void EditDomain() {
 
     }
-    private void DeleteDomain() {
+    private void DetachDomain() {
 
     }
     private void EditPort() {
 
     }
-    private void DeletePort() {
+    private void DetachPort() {
 
     }
     private void EditTag() {
 
     }
-    private void DeleteTag() {
+    private void DetachTag() {
 
     }
     protected override async Task OnInitializedAsync()

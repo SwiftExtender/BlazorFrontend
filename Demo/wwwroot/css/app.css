@@ -114,10 +114,58 @@ code {
     text-align: start;
 }
 
-.zebra-table tbody tr:nth-child(even) {
-    background-color: #187735;
+.domain-form-box {
+    border: 1.5px dashed #0071c1;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
-.zebra-table tbody tr:hover {
-    background-color: #305a3c;
+.domain-form {
+    display: flex;
+    flex-direction: column;   /* stacks children vertically */
+    gap: 1.5rem; 
+}
+
+.port-form-box {
+    border: 1.5px dashed #0502b8;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.port-form {
+    display: flex;
+    flex-direction: column;   /* stacks children vertically */
+    gap: 1.5rem; 
+}
+
+.tag-form-box {
+    border: 1.5px dashed #bb00c1;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.table-custom-head {
+    background-color: blueviolet;
+}
+
+.table-custom > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem;
+  color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
+  background-color: var(--bs-table-bg);
+  border-bottom-width: var(--bs-border-width);
+  box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
+}
+.table-custom > tbody {
+  vertical-align: inherit;
+}
+.table-custom > thead {
+  vertical-align: bottom;
+}
+
+.table-custom {
+    border: 2px solid #09240f;
+}
+
+.table-custom th, .custom-table td {
+    border: 1px solid #09240f;
 }
