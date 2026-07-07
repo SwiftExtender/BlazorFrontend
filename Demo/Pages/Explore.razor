@@ -41,12 +41,6 @@ else
                         {<div class="domain-form-box"><EditForm class="domain-form" Model="d" OnSubmit="EditDomain" FormName="DomainForm">
                             <div>
                                 <label>
-                                Id
-                                <InputNumber @bind-Value="d.Id"></InputNumber>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
                                 Name
                                 <InputText @bind-Value="d.Name"></InputText>
                                 </label>
@@ -57,6 +51,7 @@ else
                                 <InputText @bind-Value="d.Info"></InputText>
                                 </label>
                             </div>
+                            <input type="hidden" @bind-value="d.Id"/>
                             <div>
                                 <button type="btn-success">Save</button>
                                 <button type="btn-danger" @onclick="DetachDomain">Detach</button>
@@ -66,12 +61,6 @@ else
                     </td>
                     <td>@foreach (Port port in @host.Ports)
                         {<div class="port-form-box"><EditForm class="port-form" Model="port" OnSubmit="EditPort" FormName="PortForm">
-                            <div>
-                                <label>
-                                Id
-                                <InputNumber @bind-Value="port.Id"></InputNumber>
-                                </label>
-                            </div>
                             <div>
                                 <label>
                                 Number
@@ -96,6 +85,7 @@ else
                                 <InputText @bind-Value="port.Banner"></InputText>
                                 </label>
                             </div>
+                            <input type="hidden" @bind-value="port.Id"/>
                             <div>
                                 <button type="submit">Save</button>
                                 <button type="button btn-danger" @onclick="DetachPort">Detach</button>
@@ -107,16 +97,11 @@ else
                             <div class="tag-form"><EditForm Model="tag" OnSubmit="EditTag" FormName="TagForm">
                             <div>
                                 <label>
-                                Id
-                                <InputNumber @bind-Value="tag.Id"></InputNumber>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
                                 Number
                                 <InputNumber @bind-Value="tag.Name"></InputNumber>
                                 </label>
                             </div>
+                            <input type="hidden" @bind-value="tag.Id"/>
                             <div>
                                 <button type="submit">Save</button>
                                 <button type="button btn-danger" @onclick="DetachTag">Detach</button>
@@ -134,19 +119,19 @@ else
     private Hosts hosts;
     private bool isLoading = true;
     private string errorMessage;
-    private void EditDomain() {
-
+    private async Task EditDomain() {
+        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("/api/domains/edit");
     }
     private void DetachDomain() {
 
     }
-    private void EditPort() {
-
+    private async Task EditPort() {
+        Port? editPortRequest = await Http.GetFromJsonAsync<Port>("/api/ports/edit");
     }
     private void DetachPort() {
 
     }
-    private void EditTag() {
+    private async Task EditTag() {
 
     }
     private void DetachTag() {
@@ -157,7 +142,7 @@ else
         try
         {
             // Fetch and automatically deserialize the JSON into a List<User>
-            hosts = await Http.GetFromJsonAsync<Hosts>("http://localhost:4108/apiexplore");
+            hosts = await Http.GetFromJsonAsync<Hosts>("http://127.0.0.1:4108/api/explore");
         }
         catch (Exception ex)
         {
@@ -196,6 +181,9 @@ else
         public int HostId { get; set; } 
         public string Protocol { get; set; }
         public string? Banner { get; set; }
+    }
+    public class Domains {
+        public List<Domain> domains { get; set; }
     }
     public class Domain {
         public int Id { get; set; }
