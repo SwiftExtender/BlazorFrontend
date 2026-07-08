@@ -1,5 +1,6 @@
 ﻿@page "/explore"
 @using System.Net.Http.Json
+@using 
 @inject HttpClient Http
 
 <h3>Explore</h3>
@@ -38,29 +39,10 @@ else
                     <td>@host.Info</td>
                     <td>
                         @foreach (Domain d in @host.Domains)
-                        {<div class="domain-form-box"><EditForm class="domain-form" Model="d" OnSubmit="EditDomain" FormName="DomainForm">
-                            <div>
-                                <label>
-                                Name
-                                <InputText @bind-Value="d.Name"></InputText>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                Info
-                                <InputText @bind-Value="d.Info"></InputText>
-                                </label>
-                            </div>
-                            <input type="hidden" @bind-value="d.Id"/>
-                            <div>
-                                <button type="btn-success">Save</button>
-                                <button type="btn-danger" @onclick="DetachDomain">Detach</button>
-                            </div>
-                         </EditForm>
-                         </div>}
+                        {}
                     </td>
                     <td>@foreach (Port port in @host.Ports)
-                        {<div class="port-form-box"><EditForm class="port-form" Model="port" OnSubmit="EditPort" FormName="PortForm">
+                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="EditPort" FormName="PortForm">
                             <div>
                                 <label>
                                 Number
@@ -88,13 +70,13 @@ else
                             <input type="hidden" @bind-value="port.Id"/>
                             <div>
                                 <button type="submit">Save</button>
-                                <button type="button btn-danger" @onclick="DetachPort">Detach</button>
+                                <button type="button btn-danger" @onclick="() => DeletePort(port)">Detach</button>
                             </div>
                          </EditForm></div>}
                     </td>
                     <td>@foreach (Tag tag in @host.Tags)
                         {
-                            <div class="tag-form"><EditForm Model="tag" OnSubmit="EditTag" FormName="TagForm">
+                            <div class="tag-form"><EditForm Model="@tag" OnSubmit="EditTag" FormName="TagForm">
                             <div>
                                 <label>
                                 Number
@@ -104,7 +86,7 @@ else
                             <input type="hidden" @bind-value="tag.Id"/>
                             <div>
                                 <button type="submit">Save</button>
-                                <button type="button btn-danger" @onclick="DetachTag">Detach</button>
+                                <button type="button btn-danger" @onclick="() => DetachTag(tag)">Detach</button>
                             </div>
                          </EditForm></div>
                         }
@@ -120,22 +102,23 @@ else
     private bool isLoading = true;
     private string errorMessage;
     private async Task EditDomain() {
-        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("/api/domains/edit");
+        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit");
     }
-    private void DetachDomain() {
-
+    private async Task DetachDomain(Domain domain) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", domain.Id); 
     }
     private async Task EditPort() {
-        Port? editPortRequest = await Http.GetFromJsonAsync<Port>("/api/ports/edit");
+        Port? editPortRequest = await Http.GetFromJsonAsync<Port>("http://127.0.0.1:4108/api/ports/edit");
     }
-    private void DetachPort() {
-
+    private async Task DeletePort(Port port) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port.Id); 
     }
     private async Task EditTag() {
-
+        tag
+        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("/api/tags/edit");
     }
-    private void DetachTag() {
-
+    private async Task DetachTag(Tag tag) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/tags/edit", tag.Id); 
     }
     protected override async Task OnInitializedAsync()
     {
@@ -153,43 +136,5 @@ else
             isLoading = false;
         }
     }
-    public class Hosts
-    {
-        public List<Host> hosts { get; set; }
-    }
-    // C# Model matching the JSON structure
-    public class Host
-    {
-        public int Id { get; set; }
-        public string Ip { get; set; }
-        public string SubnetId { get; set; }
-        public string Subnet { get; set; }
-        public string Info { get; set; }
-        public List<Domain> Domains { get; set; }
-        public List<Port> Ports { get; set; }
-        public List<Tag> Tags { get; set; }
-    }
-    public class Tag {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string? Info { get; set; }
-    }
-    public class Port {
-        public int Id { get; set; }
-        public int Number { get; set; }
-        public string? Info { get; set; }
-        public int HostId { get; set; } 
-        public string Protocol { get; set; }
-        public string? Banner { get; set; }
-    }
-    public class Domains {
-        public List<Domain> domains { get; set; }
-    }
-    public class Domain {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string? Info { get; set; }
-    }
+   
 }

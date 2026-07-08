@@ -1,0 +1,38 @@
+@using Demo.Models;
+@using System.Net.Http.Json;
+@inject HttpClient Http
+
+@foreach (Domain d in DomainsList) {
+    <div class="domain-form-box"><EditForm class="domain-form" Model="@d" OnSubmit="EditDomain" FormName="DomainForm">
+                            <div>
+                                <label>
+                                Name
+                                <InputText @bind-Value="d.Name"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Info
+                                <InputText @bind-Value="d.Info"></InputText>
+                                </label>
+                            </div>
+                            <input type="hidden" @bind-value="d.Id"/>
+                            <div>
+                                <button type="btn-success">Save</button>
+                                <button type="btn-danger" @onclick="() => DetachDomain(d)">Detach</button>
+                            </div>
+                         </EditForm>
+                         </div>
+}
+
+
+@code {
+    [Parameter]
+    public List<Domain> DomainsList {get; set;} = new();
+    private async Task EditDomain() {
+        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit");
+    }
+    private async Task DetachDomain(Domain domain) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", domain.Id); 
+    }
+}
