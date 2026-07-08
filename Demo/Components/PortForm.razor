@@ -1,3 +1,47 @@
 @using Demo.Models;
 @using System.Net.Http.Json;
 @inject HttpClient Http
+
+@foreach (Port port in PortsList)
+                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="EditPort" FormName="PortForm">
+                            <div>
+                                <label>
+                                Number
+                                <InputNumber @bind-Value="port.Number"></InputNumber>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Info
+                                <InputText @bind-Value="port.Info"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Protocol
+                                <InputText @bind-Value="port.Protocol"></InputText>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                Banner
+                                <InputText @bind-Value="port.Banner"></InputText>
+                                </label>
+                            </div>
+                            <input type="hidden" @bind-value="port.Id"/>
+                            <div>
+                                <button type="submit">Save</button>
+                                <button type="button btn-danger" @onclick="() => DeletePort(port)">Detach</button>
+                            </div>
+                         </EditForm></div>}
+
+@code {
+    [Parameter]
+    public List<Port> PortsList {get; set;} = new List<Port>();
+    private async Task EditPort() {
+        Port? editDomainRequest = await Http.GetFromJsonAsync<Port>("http://127.0.0.1:4108/api/ports/edit");
+    }
+    private async Task DeletePort(Port port) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port.Id); 
+    }
+}

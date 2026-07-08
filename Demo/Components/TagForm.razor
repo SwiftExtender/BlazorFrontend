@@ -1,0 +1,31 @@
+@using Demo.Models;
+@using System.Net.Http.Json;
+@inject HttpClient Http
+
+@foreach (Tag tag in TagsList)
+    {
+        <div class="tag-form"><EditForm Model="tag" OnSubmit="EditTag" FormName="TagForm">
+            <div>
+            <label>
+                Number
+            <InputNumber @bind-Value="tag.Name"></InputNumber>
+            </label>
+            </div>
+            <input type="hidden" @bind-value="tag.Id"/>
+            <div>
+                <button type="submit">Save</button>
+                <button type="button btn-danger" @onclick="() => DetachTag(tag)">Detach</button>
+            </div>
+            </EditForm></div>
+            }
+
+@code {
+    [Parameter]
+    public List<Tag> TagsList {get; set;} = new List<Tag>();
+    private async Task EditTag() {
+        Tag? editDomainRequest = await Http.GetFromJsonAsync<Tag>("http://127.0.0.1:4108/api/tags/edit");
+    }
+    private async Task DetachTag(Tag tag) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/tags/delete", tag.Id); 
+    }
+}

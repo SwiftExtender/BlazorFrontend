@@ -1,6 +1,6 @@
  namespace Demo.Models;
  
- public class Hosts
+    public class Hosts
     {
         public List<Host> hosts { get; set; }
     }
@@ -38,4 +38,8 @@
         public string Name { get; set; }
 
         public string? Info { get; set; }
+    }
+    public class Site
+    {
+        public int Id { get; set; }
     }
