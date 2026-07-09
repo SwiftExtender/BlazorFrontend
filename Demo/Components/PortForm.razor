@@ -2,46 +2,57 @@
 @using System.Net.Http.Json;
 @inject HttpClient Http
 
+<button class="add-button" @onclick="CreatePortForm">Create Port</button>
+
 @foreach (Port port in PortsList)
-                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="EditPort" FormName="PortForm">
+                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="() => SavePort(port)" FormName="PortForm">
                             <div>
                                 <label>
                                 Number
-                                <InputNumber @bind-Value="port.Number"></InputNumber>
+                                <input type="number" @bind="port.Number" @bind:event="oninput"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Info
-                                <InputText @bind-Value="port.Info"></InputText>
+                                <input type="text" @bind="port.Info" @bind:event="oninput"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Protocol
-                                <InputText @bind-Value="port.Protocol"></InputText>
+                                <input type="text" @bind="port.Protocol" @bind:event="oninput"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Banner
-                                <InputText @bind-Value="port.Banner"></InputText>
+                                <input type="text" @bind="port.Banner" @bind:event="oninput"></input>
                                 </label>
                             </div>
-                            <input type="hidden" @bind-value="port.Id"/>
+                            <input type="hidden" @bind="port.Id"/>
                             <div>
-                                <button type="submit">Save</button>
+                                <button type="submit" >Save</button>
                                 <button type="button btn-danger" @onclick="() => DeletePort(port)">Detach</button>
                             </div>
                          </EditForm></div>}
 
 @code {
+    //@onclick="() => SavePort(port)"
     [Parameter]
     public List<Port> PortsList {get; set;} = new List<Port>();
-    private async Task EditPort() {
-        Port? editDomainRequest = await Http.GetFromJsonAsync<Port>("http://127.0.0.1:4108/api/ports/edit");
+
+    [Parameter]
+    public int RelatedHost {get; set;} = 0;
+
+    private async Task CreatePortForm() {
+        PortsList.Add(new Port {Number = 0, Info = String.Empty, Banner = String.Empty, HostId = RelatedHost, Protocol = "tcp"});
+    }
+    private async Task SavePort(Port newPort) {
+        await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/save", newPort);
     }
     private async Task DeletePort(Port port) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port.Id); 
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port.Id);
+        PortsList.Remove(port);
     }
 }

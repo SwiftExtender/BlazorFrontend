@@ -2,6 +2,8 @@
 @using System.Net.Http.Json;
 @inject HttpClient Http
 
+<button class="add-button" @onclick="CreateDomainForm">Create Domain</button>
+
 @foreach (Domain d in DomainsList) {
     <div class="domain-form-box"><EditForm class="domain-form" Model="@d" OnSubmit="EditDomain" FormName="DomainForm">
                             <div>
@@ -32,6 +34,15 @@
     private async Task EditDomain() {
         Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit");
     }
+
+    private async Task CreateDomainForm() {
+        DomainsList.Add(new Domain {Name = String.Empty, Info = String.Empty});
+    }
+    private async Task CreateDomain(Domain newDomain) {
+        //newDomain
+        DomainsList.Add(new Domain {Name = String.Empty, Info = String.Empty});
+    }
+
     private async Task DetachDomain(Domain domain) {
         await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", domain.Id); 
     }

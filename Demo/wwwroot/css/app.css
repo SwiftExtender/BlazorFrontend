@@ -171,3 +171,8 @@ code {
 .table-custom th, .custom-table td {
     border: 1px solid #09240f;
 }
+
+.add-button {
+    background-color: #26b050;
+    margin: 4px;
+}

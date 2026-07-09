@@ -2,6 +2,8 @@
 @using System.Net.Http.Json;
 @inject HttpClient Http
 
+<button type="add-button">Attach Tag</button>
+
 @foreach (Tag tag in TagsList)
     {
         <div class="tag-form"><EditForm Model="tag" OnSubmit="EditTag" FormName="TagForm">
