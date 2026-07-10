@@ -5,29 +5,29 @@
 <button class="add-button" @onclick="CreatePortForm">Create Port</button>
 
 @foreach (Port port in PortsList)
-                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="() => SavePort(port)" FormName="PortForm">
+                        {<div class="port-form-box"><EditForm class="port-form" Model="@port" OnSubmit="() => EditPort(port)" FormName="PortForm">
                             <div>
                                 <label>
                                 Number
-                                <input type="number" @bind="port.Number" @bind:event="oninput"></input>
+                                <input type="number" @bind="port.Number" @oninput="() => OnInputHandler(port)"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Info
-                                <input type="text" @bind="port.Info" @bind:event="oninput"></input>
+                                <input type="text" @bind="port.Info" @oninput="() => OnInputHandler(port)"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Protocol
-                                <input type="text" @bind="port.Protocol" @bind:event="oninput"></input>
+                                <input type="text" @bind="port.Protocol" @oninput="() => OnInputHandler(port)"></input>
                                 </label>
                             </div>
                             <div>
                                 <label>
                                 Banner
-                                <input type="text" @bind="port.Banner" @bind:event="oninput"></input>
+                                <input type="text" @bind="port.Banner" @oninput="() => OnInputHandler(port)"></input>
                                 </label>
                             </div>
                             <input type="hidden" @bind="port.Id"/>
@@ -38,7 +38,6 @@
                          </EditForm></div>}
 
 @code {
-    //@onclick="() => SavePort(port)"
     [Parameter]
     public List<Port> PortsList {get; set;} = new List<Port>();
 
@@ -46,13 +45,23 @@
     public int RelatedHost {get; set;} = 0;
 
     private async Task CreatePortForm() {
-        PortsList.Add(new Port {Number = 0, Info = String.Empty, Banner = String.Empty, HostId = RelatedHost, Protocol = "tcp"});
+        PortsList.Add(new Port {Number = 0, Info = String.Empty, Banner = String.Empty, HostId = RelatedHost, Protocol = "tcp", State = FormState.TEMP});
     }
-    private async Task SavePort(Port newPort) {
-        await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/save", newPort);
+    private async Task EditPort(Port newPort) {
+        await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/edit", newPort);
+        newPort.State = FormState.SAVED;
+    }
+    private async Task CreatePort(Port newPort) {
+        await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/create", newPort);
+        newPort.State = FormState.SAVED;
     }
     private async Task DeletePort(Port port) {
         await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port.Id);
         PortsList.Remove(port);
+    }
+    private void OnInputHandler(Port port) {
+        if (port.State == FormState.SAVED) {
+            port.State = FormState.EDITED;
+        }
     }
 }

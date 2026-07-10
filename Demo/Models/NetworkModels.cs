@@ -1,5 +1,9 @@
  namespace Demo.Models;
  
+    public enum FormState : int
+    {
+        TEMP, SAVED, EDITED
+    }
     public class Hosts
     {
         public List<Host> hosts { get; set; }
@@ -15,6 +19,7 @@
         public List<Domain> Domains { get; set; }
         public List<Port> Ports { get; set; }
         public List<Tag> Tags { get; set; }
+        public FormState State {get; set;}
     }
     public class Tag {
         public int Id { get; set; }
@@ -28,6 +33,7 @@
         public int HostId { get; set; } 
         public string Protocol { get; set; }
         public string? Banner { get; set; }
+        public FormState State {get; set;}
     }
     public class Domains {
         public List<Domain> domains { get; set; }
@@ -38,6 +44,7 @@
         public string Name { get; set; }
 
         public string? Info { get; set; }
+        public FormState State {get; set;}
     }
     public class Site
     {

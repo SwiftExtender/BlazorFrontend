@@ -132,6 +132,18 @@ code {
     margin-bottom: 1rem;
 }
 
+.port-form-box temp {
+    border: 1.5px dashed #a9b802;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.port-form-box edited {
+    border: 1.5px dashed #a602b8;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
 .port-form {
     display: flex;
     flex-direction: column;   /* stacks children vertically */
