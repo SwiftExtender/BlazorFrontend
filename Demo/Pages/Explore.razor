@@ -4,8 +4,6 @@
 @using Demo.Models;
 @inject HttpClient Http
 
-<h3>Explore</h3>
-
 @if (isLoading)
 {
     <p><em>Loading data...</em></p>
@@ -19,25 +17,23 @@ else
     <table class="table-custom table-striped">
         <thead class="table-custom-head">
             <tr>
-                <th>Id</th>
-                <th>Ip</th>
-                <th>SubnetId</th>
-                <th>Subnet</th>
-                <th>Info</th>
-                <th>Domains</th>
-                <th>Ports</th>
-                <th>Tags</th>
+                <th><p class="host-link">Id</p></th>
+                <th><p class="host-link">Ip</p></th>
+                <th><p class="host-link">Subnet</p></th>
+                <th><p class="host-link">Info</p></th>
+                <th><p class="host-link">Domains</p></th>
+                <th><p class="host-link">Ports</p></th>
+                <th><p class="host-link">Tags</p></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var host in hosts.hosts)
             {
                 <tr>
-                    <td>@host.Id</td>
-                    <td>@host.Ip</td>
-                    <td>@host.SubnetId</td>
+                    <td><p class="label-text">@host.Id</p></td>
+                    <td><p class="host-link">@host.Ip</p></td>
                     <td>@host.Subnet</td>
-                    <td>@host.Info</td>
+                    <td><p class="label-text">@host.Info</p></td>
                     <td>
                         <DomainForm DomainsList=host.Domains></DomainForm>
                     </td>

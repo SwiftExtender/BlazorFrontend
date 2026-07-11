@@ -5,22 +5,22 @@
 <button class="add-button" @onclick="CreateDomainForm">Create Domain</button>
 
 @foreach (Domain d in DomainsList) {
-    <div class="domain-form-box"><EditForm class="domain-form" Model="@d" OnSubmit="EditDomain" FormName="DomainForm">
+    <div class="form-box-"><EditForm class="domain-form" Model="@d" OnSubmit="EditDomain" FormName="DomainForm">
                             <div>
-                                <label>
+                                <p class="label-text">
                                 Name
                                 <InputText @bind-Value="d.Name"></InputText>
-                                </label>
+                                </p>
                             </div>
                             <div>
-                                <label>
+                                <p class="label-text">
                                 Info
                                 <InputText @bind-Value="d.Info"></InputText>
-                                </label>
+                                </p>
                             </div>
                             <input type="hidden" @bind-value="d.Id"/>
                             <div>
-                                <button type="btn-success">Save</button>
+                                <button type="btn-success" class="save-button">Save</button>
                                 <button type="btn-danger" @onclick="() => DetachDomain(d)">Detach</button>
                             </div>
                          </EditForm>

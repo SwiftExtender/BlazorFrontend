@@ -2,7 +2,7 @@
  
     public enum FormState : int
     {
-        TEMP, SAVED, EDITED
+        SAVED, TEMP, EDITED
     }
     public class Hosts
     {

@@ -1,5 +1,6 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #181a1b;
 }
 
 h1:focus {
@@ -8,6 +9,15 @@ h1:focus {
 
 a, .btn-link {
     color: #0071c1;
+}
+
+input {
+    background-color: #92cfa3;
+}
+
+textarea {
+    background-color: #92cfa3;
+    resize: both;
 }
 
 .btn-primary {
@@ -114,40 +124,26 @@ code {
     text-align: start;
 }
 
-.domain-form-box {
-    border: 1.5px dashed #0071c1;
+.form-box- {
+    border: 2px solid #02a6b8;
     padding: 1rem;
     margin-bottom: 1rem;
+    width: fit-content;
 }
 
-.domain-form {
-    display: flex;
-    flex-direction: column;   /* stacks children vertically */
-    gap: 1.5rem; 
-}
-
-.port-form-box {
-    border: 1.5px dashed #0502b8;
+.form-box-temp {
+    border: 2px solid #9865be;
     padding: 1rem;
     margin-bottom: 1rem;
+    width: fit-content;
+    background: repeating-linear-gradient(60deg, #181a1b, #181a1b 5px, #3a3f41 5px, #3a3f41 8px);
 }
 
-.port-form-box temp {
-    border: 1.5px dashed #a9b802;
+.form-box-edited {
+    border: 2px solid #9865be;
     padding: 1rem;
     margin-bottom: 1rem;
-}
-
-.port-form-box edited {
-    border: 1.5px dashed #a602b8;
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-
-.port-form {
-    display: flex;
-    flex-direction: column;   /* stacks children vertically */
-    gap: 1.5rem; 
+    width: fit-content;
 }
 
 .tag-form-box {
@@ -157,7 +153,7 @@ code {
 }
 
 .table-custom-head {
-    background-color: blueviolet;
+    background-color: #273c82;
 }
 
 .table-custom > :not(caption) > * > * {
@@ -175,16 +171,44 @@ code {
 }
 
 .table-custom {
-    border: 2px solid #09240f;
+    border: 2px solid #947C7C;
     width: 100%;
     height: 100%;
 }
 
 .table-custom th, .custom-table td {
-    border: 1px solid #09240f;
+    border: 1px solid #947C7C;
+}
+
+.port-form {
+    display: inline-block;
+}
+
+.textarea-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .add-button {
-    background-color: #26b050;
+    background-color: #8fd74c;
     margin: 4px;
+}
+
+.save-button {
+    background-color: #31743f;
+    margin: 3px;
+}
+
+.delete-button {
+    background-color: #995151;
+    margin: 3px;
+}
+
+.host-link {
+    color: #03c8f6;
+}
+
+.label-text {
+    color: #bcacac;
 }
