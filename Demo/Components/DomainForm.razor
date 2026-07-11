@@ -29,21 +29,45 @@
 
 
 @code {
+    public List<Domain> DomainsList {get; set;} = new List<Domain>();
+
     [Parameter]
-    public List<Domain> DomainsList {get; set;} = new();
-    private async Task EditDomain() {
-        Domain? editDomainRequest = await Http.GetFromJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit");
-    }
+    public int RelatedHost {get; set;} = 0;
 
     private async Task CreateDomainForm() {
-        DomainsList.Add(new Domain {Name = String.Empty, Info = String.Empty});
+        DomainsList.Add(new Domain {Name="", Info="", State = FormState.TEMP});
     }
-    private async Task CreateDomain(Domain newDomain) {
-        //newDomain
-        DomainsList.Add(new Domain {Name = String.Empty, Info = String.Empty});
+    private async Task EditDomain(Domain domain) {
+        await Http.PostAsJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit", domain);
+        domain.State = FormState.SAVED;
+        StateHasChanged();
+    }
+    private async Task CreateDomain(Domain domain) {
+        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/create", domain);
+        if (createdPortResponse.IsSuccessStatusCode) {
+            Domain createdDomain = await createdPortResponse.Content.ReadFromJsonAsync<Domain>();
+            domain.Id = createdDomain.Id;
+        }
+        domain.State = FormState.SAVED;
+        StateHasChanged();
     }
 
-    private async Task DetachDomain(Domain domain) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", domain.Id); 
+    private async Task SaveDomainProcess(Domain domain) {
+        if (domain.State == FormState.TEMP) {
+            await CreateDomain(domain);
+        } else {
+            await EditDomain(domain);
+        }
+    }
+
+    private async Task DeletePort(Domain domain) {
+        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+        DomainsList.Remove(domain);
+    }
+    private void OnInputHandler(Domain domain) {
+        if (domain.State == FormState.SAVED) {
+            domain.State = FormState.EDITED;
+            StateHasChanged();
+        }
     }
 }
