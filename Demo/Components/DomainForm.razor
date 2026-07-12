@@ -4,38 +4,37 @@
 
 <button class="add-button" @onclick="CreateDomainForm">Create Domain</button>
 
-@foreach (Domain d in DomainsList) {
-    <div class="form-box-"><EditForm class="domain-form" Model="@d" OnSubmit="EditDomain" FormName="DomainForm">
-                            <div>
-                                <p class="label-text">
-                                Name
+@foreach (Domain d in DomainsList) 
+    {<div class="form-box-@(d.State == FormState.TEMP ? "temp" : d.State == FormState.EDITED ? "edited" : "")">
+        <EditForm class="domain-form" Model="@d" FormName="DomainForm">
+                            <div class="textarea-box">
+                                <p class="label-text">Name</p>
                                 <InputText @bind-Value="d.Name"></InputText>
-                                </p>
                             </div>
-                            <div>
-                                <p class="label-text">
-                                Info
+                            <div class="textarea-box">
+                                <p class="label-text">Info</p>
                                 <InputText @bind-Value="d.Info"></InputText>
-                                </p>
                             </div>
                             <input type="hidden" @bind-value="d.Id"/>
                             <div>
-                                <button type="btn-success" class="save-button">Save</button>
-                                <button type="btn-danger" @onclick="() => DetachDomain(d)">Detach</button>
+                                <button type="btn-success" class="save-button" @onclick="() => SaveDomainProcess(d)">Save</button>
+                                <button type="button" class="delete-button" @onclick="() => DeleteDomain(d)">Detach</button>
                             </div>
                          </EditForm>
                          </div>
 }
 
-
 @code {
+    [Parameter]
     public List<Domain> DomainsList {get; set;} = new List<Domain>();
 
     [Parameter]
     public int RelatedHost {get; set;} = 0;
 
     private async Task CreateDomainForm() {
-        DomainsList.Add(new Domain {Name="", Info="", State = FormState.TEMP});
+        List<int> hostsIds = new List<int>();
+        hostsIds.Add(RelatedHost);
+        DomainsList.Add(new Domain {Name="", Info="", HostIds = hostsIds, State = FormState.TEMP});
     }
     private async Task EditDomain(Domain domain) {
         await Http.PostAsJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit", domain);
@@ -43,7 +42,8 @@
         StateHasChanged();
     }
     private async Task CreateDomain(Domain domain) {
-        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/create", domain);
+        var requestData = new { name = domain.Name, info = domain.Info, HostIds = domain.HostIds};
+        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/create", requestData);
         if (createdPortResponse.IsSuccessStatusCode) {
             Domain createdDomain = await createdPortResponse.Content.ReadFromJsonAsync<Domain>();
             domain.Id = createdDomain.Id;
@@ -60,8 +60,10 @@
         }
     }
 
-    private async Task DeletePort(Domain domain) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+    private async Task DeleteDomain(Domain domain) {
+        if (domain.State != FormState.TEMP) {
+            await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+        }
         DomainsList.Remove(domain);
     }
     private void OnInputHandler(Domain domain) {

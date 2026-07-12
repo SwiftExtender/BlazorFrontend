@@ -25,7 +25,7 @@
                             <input type="hidden" @bind="port.Id"/>
                             <div>
                                 <button type="submit" class="save-button" @onclick="() => SavePortProcess(port)">Save</button>
-                                <button type="button btn-danger" class="delete-button" @onclick="() => DeletePort(port)">Detach</button>
+                                <button type="button" class="delete-button" @onclick="() => DeletePort(port)">Detach</button>
                             </div>
                          </EditForm></div>
 }
@@ -64,7 +64,9 @@
     }
 
     private async Task DeletePort(Port port) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port);
+        if (port.State != FormState.TEMP) {
+            await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port);
+        }
         PortsList.Remove(port);
     }
     private void OnInputHandler(Port port) {

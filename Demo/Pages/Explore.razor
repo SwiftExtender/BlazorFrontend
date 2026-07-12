@@ -23,7 +23,6 @@ else
                 <th><p class="host-link">Info</p></th>
                 <th><p class="host-link">Domains</p></th>
                 <th><p class="host-link">Ports</p></th>
-                <th><p class="host-link">Tags</p></th>
             </tr>
         </thead>
         <tbody>
@@ -35,13 +34,10 @@ else
                     <td>@host.Subnet</td>
                     <td><p class="label-text">@host.Info</p></td>
                     <td>
-                        <DomainForm DomainsList=host.Domains></DomainForm>
+                        <DomainForm DomainsList=host.Domains RelatedHost="host.Id"></DomainForm>
                     </td>
                     <td>
                         <PortForm PortsList="host.Ports" RelatedHost="host.Id"></PortForm>
-                    </td>
-                    <td>
-                        <TagForm TagsList="host.Tags"></TagForm>
                     </td>
                 </tr>
             }

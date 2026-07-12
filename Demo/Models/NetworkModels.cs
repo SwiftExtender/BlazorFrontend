@@ -44,6 +44,7 @@
         public string Name { get; set; }
 
         public string? Info { get; set; }
+        public List<int> HostIds {get; set; }
         public FormState State {get; set;}
     }
     public class Site
