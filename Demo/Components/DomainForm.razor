@@ -7,21 +7,21 @@
 @foreach (Domain d in DomainsList) 
     {<div class="form-box-@(d.State == FormState.TEMP ? "temp" : d.State == FormState.EDITED ? "edited" : "")">
         <EditForm class="domain-form" Model="@d" FormName="DomainForm">
-                            <div class="textarea-box">
-                                <p class="label-text">Name</p>
-                                <InputText @bind-Value="d.Name"></InputText>
-                            </div>
-                            <div class="textarea-box">
-                                <p class="label-text">Info</p>
-                                <InputText @bind-Value="d.Info"></InputText>
-                            </div>
-                            <input type="hidden" @bind-value="d.Id"/>
-                            <div>
-                                <button type="btn-success" class="save-button" @onclick="() => SaveDomainProcess(d)">Save</button>
-                                <button type="button" class="delete-button" @onclick="() => DeleteDomain(d)">Detach</button>
-                            </div>
-                         </EditForm>
-                         </div>
+            <div class="textarea-box">
+            @* <p class="label-text">Name</p> *@
+                 <InputText @bind-Value="d.Name"></InputText>
+            </div>
+            <div class="textarea-box">
+                 @* <p class="label-text">Info</p> *@
+                 <InputText @bind-Value="d.Info"></InputText>
+            </div>
+            <input type="hidden" @bind-value="d.Id"/>
+            <div class="buttonsarea-box">
+                  <button type="btn-success" class="save-button" @onclick="() => SaveDomainProcess(d)">Save</button>
+                  <button type="button" class="delete-button" @onclick="() => DeleteDomain(d)">Detach</button>
+            </div>
+        </EditForm>
+    </div>
 }
 
 @code {

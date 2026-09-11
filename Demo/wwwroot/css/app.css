@@ -127,15 +127,13 @@ code {
 .form-box- {
     border: 2px solid #02a6b8;
     padding: 1rem;
-    margin-bottom: 1rem;
-    width: fit-content;
+    width: 300px;
 }
 
 .form-box-temp {
     border: 2px solid #9865be;
     padding: 1rem;
     margin-bottom: 1rem;
-    width: fit-content;
     background: repeating-linear-gradient(60deg, #181a1b, #181a1b 5px, #3a3f41 5px, #3a3f41 8px);
 }
 
@@ -143,13 +141,11 @@ code {
     border: 2px solid #9865be;
     padding: 1rem;
     margin-bottom: 1rem;
-    width: fit-content;
 }
 
 .tag-form-box {
     border: 1.5px dashed #bb00c1;
     padding: 1rem;
-    margin-bottom: 1rem;
 }
 
 .table-custom-head {
@@ -179,15 +175,20 @@ code {
 .table-custom th, .custom-table td {
     border: 1px solid #947C7C;
 }
-
 .port-form {
     display: inline-block;
 }
-
+.domain-form {
+    display: inline-block;
+}
 .textarea-box {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.buttonsarea-box {
+    width: 140px;
 }
 
 .add-button {
