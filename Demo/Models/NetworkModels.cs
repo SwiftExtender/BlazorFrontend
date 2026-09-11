@@ -10,10 +10,6 @@ public class PagedResponse
     public int currentPage { get; set; }
     public int totalPages { get; set; }
 }
-//public class Hosts
-//{
-//    public List<Host> hosts { get; set; }
-//}
 public class Host
 {
     public int Id { get; set; }
@@ -49,9 +45,7 @@ public class Domains
 public class Domain
 {
     public int Id { get; set; }
-
     public string Name { get; set; }
-
     public string? Info { get; set; }
     public List<int> HostIds { get; set; }
     public FormState State { get; set; }
@@ -68,7 +62,6 @@ public class RelatedImportRequest
 }
 public class Subnet
 {
-
     public int Id { get; set; }
     public string Cidr { get; set; }
     public string? Name { get; set; }

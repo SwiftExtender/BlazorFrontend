@@ -16,24 +16,19 @@ else
 {
     <nav>
         <ul class="pagination justify-content-center">
-            @if (CurrentPage > 1)
-            {
                 <li class="page-item">
-                    <a class="page-link" @onclick="() => SelectPage(CurrentPage - 1)">Previous</a>
+                    <a class="page-link" @onclick="() => SelectPage(CurrentPage - 1)">&lt;</a>
                 </li>
-            }
             @for (int i = 1; i <= TotalPages; i++)
             {
+                int pageNum = i;
                 <li class="page-item @(i == CurrentPage ? "active" : "")">
-                    <a class="page-link" @onclick="() => SelectPage(i)">@i</a>
+                    <a class="page-link" @onclick="() => SelectPage(pageNum)">@i</a>
                 </li>
             }
-            @if (CurrentPage < TotalPages)
-            {
                 <li class="page-item">
-                    <a class="page-link" @onclick="() => SelectPage(CurrentPage + 1)">Next</a>
+                    <a class="page-link" @onclick="() => SelectPage(CurrentPage + 1)">&gt;</a>
                 </li>
-            }
         </ul>
     </nav>
     <table class="table-custom table-striped">
@@ -91,9 +86,6 @@ else
     {
         try
         {
-            // Fetch and automatically deserialize the JSON into a List<User>
-            //hosts = await Http.GetFromJsonAsync<Hosts>("https://localhost:4107/api/explore");
-
             PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>("https://localhost:4107/api/explore");
             CurrentPage = hostsResponse.currentPage;
             TotalPages = hostsResponse.totalPages;
