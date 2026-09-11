@@ -14,6 +14,28 @@ else if (!string.IsNullOrEmpty(errorMessage))
 }
 else
 {
+    <nav>
+        <ul class="pagination justify-content-center">
+            @if (CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" @onclick="() => SelectPage(CurrentPage - 1)">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= TotalPages; i++)
+            {
+                <li class="page-item @(i == CurrentPage ? "active" : "")">
+                    <a class="page-link" @onclick="() => SelectPage(i)">@i</a>
+                </li>
+            }
+            @if (CurrentPage < TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" @onclick="() => SelectPage(CurrentPage + 1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
     <table class="table-custom table-striped">
         <thead class="table-custom-head">
             <tr>
@@ -26,12 +48,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var host in hosts.hosts)
+            @foreach (var host in hosts)
             {
                 <tr>
                     <td><p class="label-text">@host.Id</p></td>
                     <td><p class="host-link">@host.Ip</p></td>
-                    <td>@host.Subnet</td>
+                    <td>@host.Subnet.</td>
                     <td><p class="label-text">@host.Info</p></td>
                     <td>
                         <DomainForm DomainsList=host.Domains RelatedHost="host.Id"></DomainForm>
@@ -46,16 +68,36 @@ else
 }
 
 @code {
-    private Hosts hosts;
+    private List<Host> hosts;
     private bool isLoading = true;
     private string errorMessage;
-    
+
+    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+
+    public async Task SelectPage(int page)
+    {
+        if (page >= 1 && page <= TotalPages && page != CurrentPage)
+        {
+            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>("https://localhost:4107/api/explore?page=" + page.ToString());
+            CurrentPage = hostsResponse.currentPage;
+            TotalPages = hostsResponse.totalPages;
+            hosts = hostsResponse.hosts;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
             // Fetch and automatically deserialize the JSON into a List<User>
-            hosts = await Http.GetFromJsonAsync<Hosts>("http://127.0.0.1:4108/api/explore");
+            //hosts = await Http.GetFromJsonAsync<Hosts>("https://localhost:4107/api/explore");
+
+            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>("https://localhost:4107/api/explore");
+            CurrentPage = hostsResponse.currentPage;
+            TotalPages = hostsResponse.totalPages;
+            hosts = hostsResponse.hosts;
         }
         catch (Exception ex)
         {
