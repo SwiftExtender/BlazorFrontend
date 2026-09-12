@@ -128,19 +128,22 @@ code {
     border: 2px solid #02a6b8;
     padding: 1rem;
     width: 300px;
+    margin-bottom: 3px;
 }
 
 .form-box-temp {
     border: 2px solid #9865be;
     padding: 1rem;
-    margin-bottom: 1rem;
-    background: repeating-linear-gradient(60deg, #181a1b, #181a1b 5px, #3a3f41 5px, #3a3f41 8px);
+    width: 300px;
+    background: #3a3f41;
+    margin-bottom: 3px;
 }
 
 .form-box-edited {
     border: 2px solid #9865be;
     padding: 1rem;
-    margin-bottom: 1rem;
+    width: 300px;
+    margin-bottom: 3px;
 }
 
 .tag-form-box {
@@ -208,8 +211,10 @@ code {
 
 .host-link {
     color: #03c8f6;
+    width: 450px;
 }
 
 .label-text {
     color: #bcacac;
+    width: 100px;
 }
