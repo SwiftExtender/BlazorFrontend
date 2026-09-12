@@ -7,20 +7,16 @@
 @foreach (Port port in PortsList) {
     <div class="form-box-@(port.State == FormState.TEMP ? "temp" : port.State == FormState.EDITED ? "edited" : "")"><EditForm class="port-form" Model="@port" FormName="PortForm">
     <div class="textarea-box">
-         @* <p class="label-text">Number</p> *@
          <input type="number" @bind="port.Number" @oninput="() => OnInputHandler(port)"></input>
     </div>
     <div class="textarea-box">
-         @* <p class="label-text">Info</p> *@
-         <textarea type="text" @bind="port.Info" @oninput="() => OnInputHandler(port)"></textarea>
+         <textarea type="text" placeholder="Info" @bind="port.Info" @oninput="() => OnInputHandler(port)"></textarea>
     </div>
     <div class="textarea-box">
-         @* <p class="label-text">Protocol</p> *@
          <input type="text" @bind="port.Protocol" @oninput="() => OnInputHandler(port)"></input>
     </div>
     <div class="textarea-box">
-         @* <p class="label-text">Banner</p> *@
-         <textarea type="text" @bind="port.Banner" @oninput="() => OnInputHandler(port)"></textarea>
+         <textarea type="text" placeholder="Banner" @bind="port.Banner" @oninput="() => OnInputHandler(port)"></textarea>
     </div>
     <input type="hidden" @bind="port.Id"/>
     <div class="buttonsarea-box">

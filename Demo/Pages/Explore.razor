@@ -16,6 +16,12 @@ else if (!string.IsNullOrEmpty(errorMessage))
 }
 else
 {
+    <form class="searchform">
+        <input class="searchinput" type="search" id="query" placeholder="Search..." list="savedQueries"
+               autocomplete="off" aria-label="Search input">
+        <button type="submit" class="startsearch">Search</button>
+    </form>
+    <button type="button" class="save-button" @onclick="() => CreateHost()">Create Host</button>
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -48,6 +54,7 @@ else
                         {
                             <p class="host-link">@host.Subnet.Cidr</p>
                         }
+                        <button class="attach-button">Attach Domain</button>
                         <DomainForm DomainsList=host.Domains RelatedHost="host.Id"></DomainForm>
                     </td>
                     <td>
@@ -64,9 +71,16 @@ else
     private bool isLoading = true;
     private string errorMessage;
 
+    private HostCreatePopupForm hostInput = new();
+
     [Parameter] public int CurrentPage { get; set; } = 1;
     [Parameter] public int TotalPages { get; set; }
     [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+
+    public async Task CreateHost()
+    {
+        
+    }
 
     public async Task SelectPage(int page)
     {
@@ -107,5 +121,4 @@ else
             isLoading = false;
         }
     }
-   
 }

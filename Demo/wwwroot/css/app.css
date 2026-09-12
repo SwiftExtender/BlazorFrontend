@@ -218,3 +218,24 @@ code {
     color: #bcacac;
     width: 100px;
 }
+
+.searchform {
+    display: flex;
+    margin: 10px 20px;
+}
+
+.searchinput {
+    flex: 1;
+    border: none;
+    padding: 12px 16px;
+    font-size: 16px;
+    background-color: #8ec18a;
+}
+
+.startsearch {
+    background-color: #dec2c2
+}
+
+.attach-button {
+    background-color: lightblue;
+}

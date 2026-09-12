@@ -1,0 +1,27 @@
+﻿@using Demo.Models;
+@using System.Net.Http.Json;
+@inject HttpClient Http
+
+<div class="form-box-">
+    <EditForm class="domain-form" Model="@Host">
+        <div class="textarea-box">
+            <InputText @bind-Value="Host.Ip"></InputText>
+        </div>
+        <div class="textarea-box">
+            <InputText @bind-Value="Host.Info"></InputText>
+        </div>
+        <div class="buttonsarea-box">
+            <button type="btn-success" class="save-button" @onclick="() => SaveHost(Host)">Save</button>
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    [Parameter] public HostFormData Host { get; set; } = new();
+    private bool isVisible = false;
+    private async Task SaveHost(HostFormData host)
+    {
+        
+    }
+}

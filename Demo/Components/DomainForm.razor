@@ -8,12 +8,10 @@
     {<div class="form-box-@(d.State == FormState.TEMP ? "temp" : d.State == FormState.EDITED ? "edited" : "")">
         <EditForm class="domain-form" Model="@d" FormName="DomainForm">
             <div class="textarea-box">
-            @* <p class="label-text">Name</p> *@
-                 <InputText @bind-Value="d.Name"></InputText>
+                <InputText @bind-Value="d.Name" placeholder="Name"></InputText>
             </div>
             <div class="textarea-box">
-                 @* <p class="label-text">Info</p> *@
-                 <InputText @bind-Value="d.Info"></InputText>
+                <InputText @bind-Value="d.Info" placeholder="Info"></InputText>
             </div>
             <input type="hidden" @bind-value="d.Id"/>
             <div class="buttonsarea-box">
