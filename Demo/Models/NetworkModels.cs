@@ -6,15 +6,17 @@ public enum FormState : int
 }
 public class PagedResponse
 {
-    public List<Host> hosts { get; set; }
-    public int currentPage { get; set; }
-    public int totalPages { get; set; }
+    public List<Host> Hosts { get; set; }
+    public int CurrentPage { get; set; }
+    public int TotalPages { get; set; }
 }
 public class Host
 {
     public int Id { get; set; }
     public string Ip { get; set; }
     public int? SubnetId { get; set; }
+    public string? CreatedAt { get; set; }
+    public string? ModifiedAt { get; set; }
     public Subnet? Subnet { get; set; }
     public string? Info { get; set; }
     public List<Domain>? Domains { get; set; }
@@ -33,6 +35,8 @@ public class Port
     public int Id { get; set; }
     public int Number { get; set; }
     public string? Info { get; set; }
+    public string? CreatedAt { get; set; }
+    public string? ModifiedAt { get; set; }
     public int HostId { get; set; }
     public string Protocol { get; set; }
     public string? Banner { get; set; }
@@ -47,6 +51,8 @@ public class Domain
     public int Id { get; set; }
     public string Name { get; set; }
     public string? Info { get; set; }
+    public string? CreatedAt { get; set; }
+    public string? ModifiedAt { get; set; }
     public List<int> HostIds { get; set; }
     public FormState State { get; set; }
 }
