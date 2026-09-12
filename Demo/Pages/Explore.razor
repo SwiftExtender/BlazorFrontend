@@ -1,8 +1,10 @@
 ﻿@page "/explore"
+@page "/explore/{CurrentPage:int}"
 @using System.Net.Http.Json
 @using Demo.Components;
 @using Demo.Models;
 @inject HttpClient Http
+@inject NavigationManager Navigation
 
 @if (isLoading)
 {
@@ -62,7 +64,7 @@ else
     private bool isLoading = true;
     private string errorMessage;
 
-    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public int CurrentPage { get; set; } = 1;
     [Parameter] public int TotalPages { get; set; }
     [Parameter] public EventCallback<int> OnPageChanged { get; set; }
 
@@ -74,14 +76,24 @@ else
             CurrentPage = hostsResponse.CurrentPage;
             TotalPages = hostsResponse.TotalPages;
             hosts = hostsResponse.Hosts;
+            Navigation.NavigateTo($"/explore/{page}");
         }
     }
-
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadDataAsync(CurrentPage);
+    }
     protected override async Task OnInitializedAsync()
     {
+        await LoadDataAsync(CurrentPage);
+    }
+    protected async Task LoadDataAsync(int page)
+    {
+        isLoading = true;
+
         try
         {
-            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>("https://localhost:4107/api/explore");
+            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>($"https://localhost:4107/api/explore?page={page}");
             CurrentPage = hostsResponse.CurrentPage;
             TotalPages = hostsResponse.TotalPages;
             hosts = hostsResponse.Hosts;
