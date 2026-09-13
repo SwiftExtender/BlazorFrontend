@@ -57,10 +57,17 @@
             await EditDomain(domain);
         }
     }
-
-    private async Task DeleteDomain(Domain domain) {
-        if (domain.State != FormState.TEMP) {
+    private async Task DeleteDomain(Domain domain)
+    {
+        if (domain.State != FormState.TEMP)
+        {
             await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+        }
+        DomainsList.Remove(domain);
+    }
+    private async Task DetachDomain(Domain domain) {
+        if (domain.State != FormState.TEMP) {
+            await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", domain);
         }
         DomainsList.Remove(domain);
     }

@@ -21,7 +21,7 @@ else
                autocomplete="off" aria-label="Search input">
         <button type="submit" class="startsearch">Search</button>
     </form>
-    <button type="button" class="save-button" @onclick="() => CreateHost()">Create Host</button>
+    <HostCreatePopupForm></HostCreatePopupForm>
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -71,16 +71,9 @@ else
     private bool isLoading = true;
     private string errorMessage;
 
-    private HostCreatePopupForm hostInput = new();
-
     [Parameter] public int CurrentPage { get; set; } = 1;
     [Parameter] public int TotalPages { get; set; }
     [Parameter] public EventCallback<int> OnPageChanged { get; set; }
-
-    public async Task CreateHost()
-    {
-        
-    }
 
     public async Task SelectPage(int page)
     {
