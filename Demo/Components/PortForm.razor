@@ -1,6 +1,8 @@
 @using Demo.Models;
 @using System.Net.Http.Json;
+@inject IJSRuntime JS
 @inject HttpClient Http
+
 
 <button class="add-button" @onclick="CreatePortForm">Create Port</button>
 
@@ -60,10 +62,15 @@
     }
 
     private async Task DeletePort(Port port) {
-        if (port.State != FormState.TEMP) {
-            await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port);
+        bool confirm = await JS.InvokeAsync<bool>("confirm", "Delete Port?");
+        if (confirm)
+        {
+            if (port.State != FormState.TEMP)
+            {
+                await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port);
+            }
+            PortsList.Remove(port);
         }
-        PortsList.Remove(port);
     }
     private void OnInputHandler(Port port) {
         if (port.State == FormState.SAVED) {

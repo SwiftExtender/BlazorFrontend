@@ -1,5 +1,6 @@
 @using Demo.Models;
 @using System.Net.Http.Json;
+@inject IJSRuntime JS
 @inject HttpClient Http
 
 <button class="add-button" @onclick="CreateDomainForm">Create Domain</button>
@@ -59,11 +60,15 @@
     }
     private async Task DeleteDomain(Domain domain)
     {
-        if (domain.State != FormState.TEMP)
+        bool confirm = await JS.InvokeAsync<bool>("confirm", "Delete Domain?");
+        if (confirm)
         {
-            await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+            if (domain.State != FormState.TEMP)
+            {
+                await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+            }
+            DomainsList.Remove(domain);
         }
-        DomainsList.Remove(domain);
     }
     private async Task DetachDomain(Domain domain) {
         if (domain.State != FormState.TEMP) {
