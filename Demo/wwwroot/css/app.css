@@ -247,3 +247,13 @@ code {
     .host-form form input {
         
     }
+.bulkinput {
+    width: 1400px;
+    height: 450px;
+    background-color: #5b8a57;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    field-sizing: content;
+    min-height: 7lh;
+    min-width: 700px;
+}

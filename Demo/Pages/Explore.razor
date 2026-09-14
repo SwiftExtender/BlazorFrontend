@@ -6,6 +6,7 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
+<PageTitle>Explore</PageTitle>
 @if (isLoading)
 {
     <p><em>Loading data...</em></p>
@@ -113,10 +114,6 @@ else
         await LoadDataAsync();
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     await LoadDataAsync();
-    // }
     protected async Task LoadDataAsync()
     {
         isLoading = true;
