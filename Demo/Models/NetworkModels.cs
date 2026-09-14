@@ -75,6 +75,11 @@ public class Subnet
     public DateTime? CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
 }
+public class DetachDomainRequest
+{
+    public int DomainId { get; set; }
+    public List<int> HostIds { get; set; }
+}
 public class HostFormData
 {
     public string Ip { get; set; }
