@@ -1,5 +1,5 @@
 ﻿@page "/explore"
-@page "/explore/{CurrentPage:int}"
+@page "/explore/{CurrentPage:int?}"
 @using System.Net.Http.Json
 @using Demo.Components;
 @using Demo.Models;
@@ -18,8 +18,8 @@ else
 {
     <form class="searchform">
         <input class="searchinput" type="search" id="query" placeholder="Search..." list="savedQueries"
-               autocomplete="off" aria-label="Search input">
-        <button type="submit" class="startsearch">Search</button>
+               autocomplete="off" aria-label="Search input" value=@SearchInput @oninput=HandleSearchInput>
+        <button type="submit" class="startsearch" @onclick="() => SearchRequest()">Search</button>
     </form>
     <HostCreatePopupForm></HostCreatePopupForm>
     <nav>
@@ -70,37 +70,64 @@ else
     private List<Host> hosts;
     private bool isLoading = true;
     private string errorMessage;
+    private string _SearchInput;
 
-    [Parameter] public int CurrentPage { get; set; } = 1;
-    [Parameter] public int TotalPages { get; set; }
-    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+    public int TotalPages { get; set; }
+    [Parameter] 
+    public int? CurrentPage { get; set; } = 1;
 
-    public async Task SelectPage(int page)
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "search")]
+    public string? SearchInput { get; set; } = "";
+
+    public async Task SearchRequest()
+    {
+        SearchInput = _SearchInput.Trim();
+        if (SearchInput != "")
+        {
+            NavigateToPage(1);
+        }
+    }
+
+    private void HandleSearchInput(ChangeEventArgs e)
+    {
+        _SearchInput = e.Value?.ToString() ?? "";
+    }
+
+    public async Task NavigateToPage(int? page)
+    {
+        var queryString = string.IsNullOrEmpty(SearchInput) ? $"/explore/{page}" : $"/explore/{page}?search={SearchInput}";
+        Navigation.NavigateTo(queryString, forceLoad: false);
+    }
+
+    public async Task SelectPage(int? page)
     {
         if (page >= 1 && page <= TotalPages && page != CurrentPage)
         {
-            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>("https://localhost:4107/api/explore?page=" + page.ToString());
-            CurrentPage = hostsResponse.CurrentPage;
-            TotalPages = hostsResponse.TotalPages;
-            hosts = hostsResponse.Hosts;
-            Navigation.NavigateTo($"/explore/{page}");
+            await NavigateToPage(page);
         }
     }
+
     protected override async Task OnParametersSetAsync()
     {
-        await LoadDataAsync(CurrentPage);
+        await LoadDataAsync();
     }
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadDataAsync(CurrentPage);
-    }
-    protected async Task LoadDataAsync(int page)
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     await LoadDataAsync();
+    // }
+    protected async Task LoadDataAsync()
     {
         isLoading = true;
-
+        errorMessage = null;
+        CurrentPage = CurrentPage ?? 1;
+        SearchInput ??= "";
         try
         {
-            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>($"https://localhost:4107/api/explore?page={page}");
+            string queryString = string.IsNullOrEmpty(SearchInput) ? $"/explore?page={CurrentPage}" : $"/explore/?page={CurrentPage}&search={SearchInput}";
+            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>($"https://localhost:4107/api{queryString}");
+
             CurrentPage = hostsResponse.CurrentPage;
             TotalPages = hostsResponse.TotalPages;
             hosts = hostsResponse.Hosts;
@@ -112,6 +139,7 @@ else
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 }
