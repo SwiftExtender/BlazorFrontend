@@ -16,17 +16,18 @@ else if (!string.IsNullOrEmpty(errorMessage))
 }
 else
 {
-    <h4>Bulk Load</h4>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Load">
-                <textarea name="data" class="bulkinput" value=@importData.Data></textarea>
-                <input name="tag" class="searchinput" value=@importData.Tag />
+            <textarea name="data" class="bulkinput" @bind=importData.Data></textarea>
+                <input name="tag" class="searchinput" @bind=importData.Tag />
                 <div style="display: flex; gap: 30px">
                     <div class="form-group">
                         <div>
-                            <select name="RelationType">
+                        <select name="RelationType" @bind=importData.RelationType>
+                            <option value="domainshostsports">Domains,Hosts,Ports</option>
+                            <option value="hostsports">Hosts,Ports</option>
+                            <option value="sitesurls">Sites,Urls</option>
                                 <option value="Domain">Domains</option>
                                 <option value="Hosts">Hosts</option>
                                 <option value="Notes">Notes</option>
@@ -40,30 +41,25 @@ else
                             </select>
                         </div>
                         <div>
-                            <button type="submit" class="page-link" @onclick="() => Load()">Load</button>
+                            <button class="page-link" @onclick="() => Load()">Load</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <div>
-                            <select name="RelationType">
-                                <option value="domainshostsports">Domains,Hosts,Ports</option>
-                                <option value="hostsports">Hosts,Ports</option>
-                                <option value="sitesurls">Sites,Urls</option>
-                            </select>
-                        </div>
-                        <div>
-                            <button type="submit" class="page-link" @onclick="() => LoadWithRelations()">Load with relations</button>
+                            <button class="page-link" @onclick="() => LoadWithRelations()">Load with relations</button>
                         </div>
                     </div>
                 </div>
-
-            </form>
+                @if (errorMessage != "")
+                {
+                    <label>@errorMessage</label>
+                }
         </div>
     </div>
 }
 
 @code {
-    private string errorMessage;
+    public string errorMessage = "";
     private bool isLoading = true;
 
     public RelatedImportRequest importData = new();
@@ -75,13 +71,32 @@ else
 
     protected async Task Load()
     {
-        await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/load", importData);
-        StateHasChanged();
+        errorMessage = "";
+        try {
+            if (importData.RelationType == null)
+            {
+                throw new Exception("null RelationType");
+            }
+            await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/load", importData);
+            StateHasChanged();
+        } catch (Exception e) {
+            errorMessage = e.Message;
+        }
     }
     protected async Task LoadWithRelations()
     {
-        await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/relatedload", importData);
-        StateHasChanged();
+        errorMessage = "";
+
+        try {
+            if (importData.RelationType == null)
+            {
+                throw new Exception("null RelationType");
+            }
+            await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/relatedload", importData);
+            StateHasChanged();
+        } catch (Exception e) {
+            errorMessage = e.Message;
+        }
     }
     protected async Task InitAsync()
     {
@@ -89,7 +104,7 @@ else
         errorMessage = null;
         try
         {
-
+            importData.RelationType = "domainshostsports";
         }
         catch (Exception ex)
         {
