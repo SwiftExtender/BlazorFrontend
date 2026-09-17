@@ -15,8 +15,8 @@ public class Host
     public int Id { get; set; }
     public string Ip { get; set; }
     public int? SubnetId { get; set; }
-    public string? CreatedAt { get; set; }
-    public string? ModifiedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
     public Subnet? Subnet { get; set; }
     public string? Info { get; set; }
     public List<Domain>? Domains { get; set; }
