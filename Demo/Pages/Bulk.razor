@@ -41,6 +41,9 @@ else
                             </select>
                         </div>
                         <div>
+                        <input type="checkbox" @bind=importData.WithUpdating></input>
+                        </div>
+                        <div>
                             <button class="page-link" @onclick="() => Load()">Load</button>
                         </div>
                     </div>
