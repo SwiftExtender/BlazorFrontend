@@ -65,7 +65,7 @@ public class RelatedImportRequest
     public string RelationType { get; set; }
     public string Data { get; set; }
     public string? Tag { get; set; }
-    public bool WithUpdating { get; set; }
+    public bool WithUpdating { get; set; } = true;
 }
 public class Subnet
 {

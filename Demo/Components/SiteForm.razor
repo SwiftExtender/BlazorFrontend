@@ -10,9 +10,9 @@
     [Parameter]
     public List<Site> SitesList {get; set;} = new List<Site>();
     private async Task EditDomain() {
-        Site? editDomainRequest = await Http.GetFromJsonAsync<Site>("http://127.0.0.1:4108/api/sites/edit");
+        Site? editDomainRequest = await Http.GetFromJsonAsync<Site>("/api/sites/edit");
     }
     private async Task DeletePort(Site site) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/sites/delete", site.Id); 
+        await Http.PostAsJsonAsync("/api/sites/delete", site.Id); 
     }
 }

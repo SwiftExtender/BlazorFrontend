@@ -41,7 +41,7 @@ else
                             </select>
                         </div>
                         <div>
-                        <input type="checkbox" @bind=importData.WithUpdating></input>
+                        <input type="checkbox" @bind=importData.WithUpdating/>
                         </div>
                         <div>
                             <button class="page-link" @onclick="() => Load()">Load</button>
@@ -80,7 +80,7 @@ else
             {
                 throw new Exception("null RelationType");
             }
-            await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/load", importData);
+            await Http.PostAsJsonAsync<RelatedImportRequest>("/api/bulk/load", importData);
             StateHasChanged();
         } catch (Exception e) {
             errorMessage = e.Message;
@@ -95,7 +95,7 @@ else
             {
                 throw new Exception("null RelationType");
             }
-            await Http.PostAsJsonAsync<RelatedImportRequest>($"https://localhost:4107/api/bulk/relatedload", importData);
+            await Http.PostAsJsonAsync<RelatedImportRequest>("/api/bulk/relatedload", importData);
             StateHasChanged();
         } catch (Exception e) {
             errorMessage = e.Message;

@@ -43,7 +43,7 @@
     }
     private async Task SaveHost(HostFormData host)
     {
-        await Http.PostAsJsonAsync<HostFormData>("http://127.0.0.1:4108/api/hosts/create", host);
+        await Http.PostAsJsonAsync<HostFormData>("/api/hosts/create", host);
         Navigation.Refresh(true);
     }
 } 

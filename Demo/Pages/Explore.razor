@@ -124,7 +124,7 @@ else
         try
         {
             string queryString = string.IsNullOrEmpty(SearchInput) ? $"/explore?page={CurrentPage}" : $"/explore/?page={CurrentPage}&search={SearchInput}";
-            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>($"https://localhost:4107/api{queryString}");
+            PagedResponse hostsResponse = await Http.GetFromJsonAsync<PagedResponse>($"/api{queryString}");
 
             CurrentPage = hostsResponse.CurrentPage;
             TotalPages = hostsResponse.TotalPages;

@@ -67,7 +67,7 @@
         {
             if (port.State != FormState.TEMP)
             {
-                await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/ports/delete", port);
+                await Http.PostAsJsonAsync("/api/ports/delete", port);
             }
             PortsList.Remove(port);
         }

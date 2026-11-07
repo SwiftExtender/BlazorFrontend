@@ -36,13 +36,13 @@
         DomainsList.Add(new Domain { Name = "", Info = "", HostIds = hostsIds, State = FormState.TEMP });
     }
     private async Task EditDomain(Domain domain) {
-        await Http.PostAsJsonAsync<Domain>("http://127.0.0.1:4108/api/domains/edit", domain);
+        await Http.PostAsJsonAsync<Domain>("/api/domains/edit", domain);
         domain.State = FormState.SAVED;
         StateHasChanged();
     }
     private async Task CreateDomain(Domain domain) {
         var requestData = new { name = domain.Name, info = domain.Info, HostIds = domain.HostIds};
-        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/create", requestData);
+        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync("/api/domains/create", requestData);
         if (createdPortResponse.IsSuccessStatusCode) {
             Domain createdDomain = await createdPortResponse.Content.ReadFromJsonAsync<Domain>();
             domain.Id = createdDomain.Id;
@@ -65,7 +65,7 @@
         {
             if (domain.State != FormState.TEMP)
             {
-                await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/delete", domain);
+                await Http.PostAsJsonAsync("/api/domains/delete", domain);
             }
             DomainsList.Remove(domain);
         }
@@ -78,7 +78,7 @@
             {
                 List<int> hostsIds = new List<int>();
                 hostsIds.Add(RelatedHost);
-                await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/domains/detach", new DetachDomainRequest { DomainId = domain.Id, HostIds = hostsIds });
+                await Http.PostAsJsonAsync("/api/domains/detach", new DetachDomainRequest { DomainId = domain.Id, HostIds = hostsIds });
             }
             DomainsList.Remove(domain);
         }

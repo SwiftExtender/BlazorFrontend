@@ -25,9 +25,9 @@
     [Parameter]
     public List<Tag> TagsList {get; set;} = new List<Tag>();
     private async Task EditTag() {
-        Tag? editDomainRequest = await Http.GetFromJsonAsync<Tag>("http://127.0.0.1:4108/api/tags/edit");
+        Tag? editDomainRequest = await Http.GetFromJsonAsync<Tag>("/api/tags/edit");
     }
     private async Task DetachTag(Tag tag) {
-        await Http.PostAsJsonAsync("http://127.0.0.1:4108/api/tags/delete", tag.Id); 
+        await Http.PostAsJsonAsync("/api/tags/delete", tag.Id); 
     }
 }
