@@ -6,7 +6,7 @@
 
 <button class="add-button" @onclick="CreatePortForm">Create Port</button>
 
-@foreach (Port port in PortsList) {
+@foreach (Port port in SortedPortsList) {
     <div class="form-box-@(port.State == FormState.TEMP ? "temp" : port.State == FormState.EDITED ? "edited" : "")"><EditForm class="port-form" Model="@port" FormName="PortForm">
     <div class="textarea-box">
          <input type="number" @bind="port.Number" @oninput="() => OnInputHandler(port)"></input>
@@ -35,16 +35,19 @@
     [Parameter]
     public int RelatedHost {get; set;} = 0;
 
-    private async Task CreatePortForm() {
-        PortsList.Add(new Port {Number = 0, Info = String.Empty, Banner = String.Empty, HostId = RelatedHost, Protocol = "tcp", State = FormState.TEMP});
+    public List<Port> SortedPortsList { get; set; } = new List<Port>();
+
+    private async Task CreatePortForm()
+    {
+        SortedPortsList.Add(new Port { Number = 0, Info = String.Empty, Banner = String.Empty, HostId = RelatedHost, Protocol = "tcp", State = FormState.TEMP });
     }
     private async Task EditPort(Port newPort) {
-        await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/edit", newPort);
+        await Http.PostAsJsonAsync<Port>("/api/ports/edit", newPort);
         newPort.State = FormState.SAVED;
         StateHasChanged();
     }
     private async Task CreatePort(Port newPort) {
-        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync<Port>("http://127.0.0.1:4108/api/ports/create", newPort);
+        HttpResponseMessage? createdPortResponse = await Http.PostAsJsonAsync<Port>("/api/ports/create", newPort);
         if (createdPortResponse.IsSuccessStatusCode) {
             Port createdPort = await createdPortResponse.Content.ReadFromJsonAsync<Port>();
             newPort.Id = createdPort.Id;
@@ -69,7 +72,7 @@
             {
                 await Http.PostAsJsonAsync("/api/ports/delete", port);
             }
-            PortsList.Remove(port);
+            SortedPortsList.Remove(port);
         }
     }
     private void OnInputHandler(Port port) {
@@ -77,5 +80,10 @@
             port.State = FormState.EDITED;
             StateHasChanged();
         }
+    }
+    protected override void OnParametersSet()
+    {
+        SortedPortsList = PortsList.OrderBy(port => port.Number).ToList();
+        base.OnParametersSet();
     }
 }
